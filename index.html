@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<title>デザイナーの為のWEBコーディング効率化講座（Sass・Gulp入門）</title>
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>デザイナーの為の<br>WEBコーディング効率化講座</h2>
+					<h2>（Sass・Gulp入門）</h2>
+				</section>
+
+				<section data-background="#ffffff">
+					<h2>本日のアジェンダ</h2>
+					<ol>
+						<li>Sassについて</li>
+						<li>Sassのメリット</li>
+						<li>Sassを使ってみよう！</li>
+						<li>Sass、Gulpを使うための環境構築</li>
+                        <li>gulpを使った自動処理の設定</li>
+					</ol>
+				</section>
+				
+				<section data-background="#2f7579">
+					<h1>自己紹介</h1>
+				</section>
+				
+				<section data-background="#ffffff" style="text-align: left;">
+					<h2>宮山 義浩</h2>
+					<h3>Yoshihiro Miyayama</h3>
+					<ul>
+                        <li>SEとしてWebサービスからアプリ開発まで経験</li>
+						<li>2014年、株式会社セラクに入社</li>
+                        <li>フロントエンドエンジニアを経て、教育担当へ</li>
+                        <li>趣味：サイト製作・バドミントン</li>
+					</ul>
+				</section>
+				
+				<section data-background="#2f7579">
+					<h1>Sassについて</h1>
+				</section>
+				
+				<section data-background="#ffffff">
+                    <section>
+                        <h2>Sass（サス）とは？</h2>
+                        <ul>
+                            <li>CSSを拡張したメタ言語</li>
+                            <li>「Syntactically Awesome Style Sheets」の略</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>メタ言語って何？</h2>
+                        <p>ある言語について何らかの記述をするための言語</p>
+                        ↓
+                        <p>Sass「CSSに対して機能を拡張した言語」</p>
+                    </section>
+                    <section>
+						<h3>Sassの普及率</h3>
+                        <a href="https://ashleynolan.co.uk/blog/frontend-tooling-survey-2018-results" target="_blank"><img width="720" height="570" data-src="pictures/pictures1.jpg"></a>
+					</section>
+                    <section>
+                        <h2>Sassの記法</h2>
+                        <ul>
+                            <li>SASS記法「.sass」</li>
+                            <li>SCSS記法「.scss」</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>SASS記法</h2>
+                        <pre><code class="hljs">nav
+  margin: 0 auto
+  li
+    margin-left: 5px
+</code></pre>
+                    </section>
+                    <section>
+                        <h2>SCSS記法</h2>
+                        <pre><code class="hljs">nav {
+  margin: 0 auto;
+  li {
+    margin-left: 5px;
+  }
+}
+</code></pre>
+                    </section>
+                    <section>
+						<h3>Sassを使うときの注意点</h3>
+                        <p>ブラウザはSassファイルを認識できない</p>
+						<img width="814" height="423" data-src="pictures/picture20.png">
+					</section>
+                    <section>
+						<h3>コンパイルするには</h3>
+                        <ul>
+                            <li>Ruby＋Sass</li>
+                            <li>Node.js＋node-sass</li>
+                        </ul>
+					</section>
+				</section>
+                
+                <section data-background="#2f7579">
+					<h1>Sassのメリット</h1>
+				</section>
+                
+                <section data-background="#ffffff">
+                    <section>
+                        <h2>便利なSassの機能</h2>
+                        <ul>
+                            <li>入れ子（ネスト）ができる</li>
+                            <li>変数が使える</li>
+                            <li>演算子が使える</li>
+                            <li>セレクタが使いまわせる</li>
+                            <li>コードが再利用できる</li>
+                        </ul>
+                    </section>
+                    <section data-background="#ffffff">
+						<h3>①入れ子（ネスト）ができる</h3>
+                        <pre><code class="hljs">nav ul { margin: 0; }
+nav li { display: inline-block; }
+</code></pre>
+                        ↓
+                        <pre><code class="hljs">nav {
+  ul { margin: 0; }
+  li { display: inline-block; }
+}
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>②変数が使える</h3>
+                        <pre><code class="hljs">$primary-color: #333;
+
+body {
+  color: $primary-color;
+}
+</code></pre>
+                        ↓
+                        <pre><code class="hljs">body { color: #333; }
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>③演算子が使える</h3>
+                        <pre><code class="hljs">article {
+  width: 600px / 960px * 100%;
+}
+</code></pre>
+                        ↓
+                        <pre><code class="hljs">article {
+  width: 62.5%;
+}
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>④セレクタが使いまわせる</h3>
+                        <pre><code class="hljs">.button {
+    display: inline-block;
+　　padding:20px;
+　　border-radius: 30px;}
+  
+.button--red {
+　　@extend .button;
+　　background: red;
+}
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>⑤コードが再利用できる</h3>
+                        <pre><code class="hljs">@mixin button{
+　　display: inline-block;
+　　padding: 10px;
+}
+
+.button--red {
+　　@include button;
+    background: red;
+}
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>⑥コードが再利用できる（引数を使う）</h3>
+                        <pre><code class="hljs">@mixin button($color:white) {
+　padding: 10px;
+　background: $color;
+}
+
+.button--normal {@include button;}
+
+.button--red {@include button(red);}
+</code></pre>
+					</section>
+                    
+                </section>
+                
+                <section data-background="#2f7579">
+					<h1>Sassを導入する上での不安</h1>
+				</section>
+                
+                <section data-background="#ffffff">
+					<section>
+						<h2>導入のハードル</h2>
+                        <ul>
+                            <li>黒い画面が苦手です...</li>
+                            <li>自分の使っているエディタではSassが書けるの？</li>
+                            <li>他の人はSassを使えないのに自分だけやっても...</li>
+                        </ul>
+					</section>
+                    <section>
+						<h2>黒い画面への苦手意識</h2>
+                        <p>GUIのツールもありますがgulpが便利！</p>
+                        <p>決まったコマンドを打つだけ！</p>
+					</section>
+                    <section>
+						<h2>Sassが使えるエディタ</h2>
+                        <ul>
+                            <li>Visual Studio Code</li>
+                            <li>Atom</li>
+                            <li>Brackets</li>
+                            <li>Dreamweaver</li>
+                        </ul>
+					</section>
+                    <section>
+						<h2>会社でSassを導入しにくい</h2>
+                        <ul>
+                            <li>自分はSassで作業し、コンパイルして渡す</li>
+                            <li>速くコーディングできることを啓蒙する</li>
+                            <li>この講座を紹介してもらう（★重要）</li>
+                        </ul>
+                        <p></p>
+					</section>
+                </section>
+                
+                <section data-background="#2f7579">
+					<h1>Sassを使ってみよう！</h1>
+				</section>
+                
+				<section data-background="#ffffff">
+					<section>
+						<p>CodePenでSassのコードを<br>実際に書いてみましょう</p>
+					</section>
+                    <section>
+                        <h3>Sass対応オンラインエディター</h3>
+                        <a href="https://codepen.io/" target="_blank">
+                            <img width="1058" height="486" data-src="pictures/picture7.png">
+                        </a>
+                    </section>
+                    <section>
+                        <p>「Create」をクリックし、「New Pen」を選択</p>
+                        <img width="581" height="443" data-src="pictures/picture8.PNG">
+                    </section>
+                    <section>
+                        <p>「Change View」をクリックし、<br>レイアウトを選択</p>
+                        <img width="600" height="426" data-src="pictures/picture9.PNG">
+                    </section>
+                    <section>
+                        <p>「Settings > CSS > SCSS」を選択</p>
+                        <img width="699" height="497" data-src="pictures/picture21.PNG">
+                    </section>
+                    <section data-background="#ffffff">
+						<h3>サンプルのHTML</h3>
+                        <pre><code class="hljs"><!-- 入れ子（ネスト）ができる -->
+<nav>
+  <ul>
+    <li><a href="">サービス</a></li>
+    <li><a href="">会社案内</a></li>
+    <li><a href="">FAQ</a></li>
+  </ul>
+</nav>
+
+<!-- 変数が使える -->
+<p class="notes">変数が使えます</p>
+
+<!-- 演算子が使える -->
+<ul class="tab">
+    <li class="tab-item"><a href="">資料請求</a></li>
+    <li class="tab-item"><a href="">手数料</a></li>
+    <li class="tab-item"><a href="">店舗一覧</a></li>
+</ul>
+
+<!-- セレクタが使いまわせる -->
+<div class="button">ボタン</div>
+<div class="button-red">ボタン</div>
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>入れ子（ネスト）ができる</h3>
+                        <pre><code class="hljs">nav {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li { display: inline-block; }
+
+  a {
+    display: block;
+    padding: 6px 12px;
+    text-decoration: none;
+  }
+}
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>変数が使える</h3>
+                        <pre><code class="hljs">$red: #ff1122;
+
+.notes {
+  color: $red;
+  border: 1px solid $red;
+}
+</code></pre>
+                    </section>
+                    <section data-background="#ffffff">
+						<h3>演算子が使える</h3>
+                        <pre><code class="hljs">.tab {
+  .tab-item {
+    display: inline-block;
+    box-sizing: border-box;
+    background: #288092;
+    text-align: center;
+    padding: 20px 0;
+    width: (95%/3) ;
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+    }
+}
+</code></pre>
+                    </section>
+                    <section data-background="#ffffff">
+						<h3>セレクタが使いまわせる</h3>
+                        <pre><code class="hljs">.button {
+    display: inline-block;
+    background-color: #262e73;
+    color: #fff;
+    padding:20px;
+}
+.button-red {
+    @extend .button;
+    background: red;
+}
+</code></pre>
+                    </section>
+                </section>
+                
+                <section data-background="#2f7579">
+					<h2>Sass、Gulpを<br>使うための環境構築</h2>
+				</section>
+                
+                <section data-background="#ffffff">
+					<section data-background="#ffffff">
+						<h3>黒い画面を使います！</h3>
+						<ul>
+                            <li>Node.jsのインストール</li>
+                            <li>Gulpのインストール</li>
+                            <li>Sassを自動コンパイルする環境を整える</li>
+                        </ul>
+					</section>
+                    <section data-background="#ffffff">
+						<h2>Node.jsとは</h2>
+                        <p>JavaScriptで作られたサーバーサイド環境</p>
+                        <p>必要なパッケージを簡単にインストール可！</p>
+					</section>
+                    <section data-background="#ffffff">
+						<h2>gulp（ガルプ）とは</h2>
+                        <p>様々な処理を自動化するツールである<br>タスクランナーの1つ</p>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>1．Node.jsインストール</h3>
+						<a href="https://nodejs.org/ja/"><img width="708" height="546" data-src="pictures/picture2.png"></a>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>2．Node.jsのインストール確認(Windows)</h3>
+						<img width="450" height="477" data-src="pictures/picture3.png">
+					</section>
+                    <section data-background="#ffffff">
+						<h3>2．Node.jsのインストール確認(Windows)</h3>
+						<pre><code class="hljs">node -v
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>2．Node.jsのインストール確認(Windows)</h3>
+						<img width="678" height="261" data-src="pictures/picture4.png">
+					</section>
+                    <section data-background="#ffffff">
+						<h3>3．作業用フォルダの作成</h3>
+						<p>「test-project」というフォルダを任意の場所に作ります</p>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>3．作業用フォルダに移動する</h3>
+                        <p>「cd」と入力し、半角スペースを入力してから<br>作業用フォルダをドラッグ＆ドロップします</p>
+						<pre><code class="hljs">cd C:¥Users¥★★★¥test-project
+</code></pre>
+                        <p>完了したら「Enter」を押します</p>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>3．作業用フォルダに移動する</h3>
+						<img width="678" height="274" data-src="pictures/picture6.png">
+					</section>
+                    <section data-background="#ffffff">
+						<h3>4．package.jsonの作成</h3>
+						<pre><code class="hljs">npm init -y
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>4．package.jsonの作成</h3>
+						<img width="677" height="494" data-src="pictures/picture10.png">
+					</section>
+                    <section data-background="#ffffff">
+						<h2>5．Gulpをインストール</h2>
+						<pre><code class="hljs">npm install -D gulp
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+						<h3>5．Gulpをインストール</h3>
+						<img width="679" height="495" data-src="pictures/picture11.png">
+					</section>
+                    <section data-background="#ffffff">
+						<h3>6．package.jsonの確認</h3>
+						<img width="816" height="440" data-src="pictures/picture12.png">
+					</section>
+                    
+                    
+                    <section data-background="#ffffff">
+						<h3>7．cssフォルダの作成</h3>
+						<p>「test-project」の中に「css」という<br>フォルダを作ります</p>
+                        <img width="476" height="148" data-src="pictures/picture13.png">
+					</section>
+                    
+                    <section data-background="#ffffff">
+						<h3>8．モジュールのインストール</h3>
+						<pre><code class="hljs">npm install -D gulp gulp-sass
+</code></pre>
+					</section>
+                    
+                    <section data-background="#ffffff">
+						<img width="476" height="148" data-src="pictures/picture14.png">
+					</section>
+                    
+                    <section data-background="#ffffff">
+                        <h3>9．Gulpが使えるようになったことを確認する</h3>
+						<pre><code class="hljs">npx gulp -v
+</code></pre>
+					</section>
+                    
+                    <section data-background="#ffffff">
+                        <h3>10．sassファイルを用意する</h3>
+						<pre><code class="hljs">div {
+  p {
+    font-weight: bold;
+  }
+}
+
+$fontColor: #525252;
+ 
+h1 {
+  color: $fontColor;
+}
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+                        <h3>11．gulpfile.jsを用意する</h3>
+						<pre><code class="hljs">// gulpプラグインの読み込み
+const gulp = require('gulp');
+// Sassをコンパイルするプラグインの読み込み
+const sass = require('gulp-sass');
+ 
+// style.scssをタスクを作成する
+gulp.task('default', function () {
+  // style.scssファイルを取得
+  gulp.src('css/style.scss')
+    // Sassのコンパイルを実行
+    .pipe(sass({
+      outputStyle: 'expanded'
+    }))
+    // cssフォルダー以下に保存
+    .pipe(gulp.dest('css'));
+});
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+                        <h3>12．Gulpを実行する</h3>
+						<pre><code class="hljs">npx gulp
+</code></pre>
+					</section>
+                    
+                    <section data-background="#ffffff">
+                        <h3>変換されたCSSファイル</h3>
+						<pre><code class="hljs">div p {
+  font-weight: bold;
+}
+
+h1 {
+  color: #525252;
+}
+</code></pre>
+					</section>
+                    
+				</section>
+                
+                <section data-background="#2f7579">
+					<h2>Gulpを使った自動処理の設定</h2>
+				</section>
+                
+                <section data-background="#ffffff">
+					<section data-background="#ffffff">
+                        <p>watch機能を使ってSassファイルを自動コンパイルしてみよう</p>
+                    </section>
+                    <section data-background="#ffffff">
+                        <h3>gulpfile.jsを用意する</h3>
+						<pre><code class="hljs">// gulpプラグインの読み込み
+const gulp = require('gulp');
+// Sassをコンパイルするプラグインの読み込み
+const sass = require('gulp-sass');
+  
+// style.scssの監視タスクを作成する
+gulp.task('default', function () {
+  // ★ style.scssファイルを監視
+  gulp.watch('css/style.scss', function () {
+    // style.scssの更新があった場合の処理
+  
+    // style.scssファイルを取得
+    gulp.src('css/style.scss')
+      // Sassのコンパイルを実行
+      .pipe(sass({
+        outputStyle: 'expanded'
+      })
+      // Sassのコンパイルエラーを表示
+      // (これがないと自動的に止まってしまう)
+      .on('error', sass.logError))
+      // cssフォルダー以下に保存
+      .pipe(gulp.dest('css'));
+  });
+});
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+                        <h3>Gulpを実行する</h3>
+						<pre><code class="hljs">npx gulp
+</code></pre>
+					</section>
+                    <section data-background="#ffffff">
+                        <h3>watchを終了する</h3>
+                        <p>Windows：Ctrl + C</p>
+                        <p>Mac：control + c</p>
+					</section>
+					<section data-background="#ffffff">
+                        <h2>gulpでできる便利なこと</h2>
+                        <ul>
+                            <li>ファイルの複製、削除、移動、結合</li>
+                            <li>JavaScriptファイルのminify</li>
+                            <li>画像ファイルの最適化</li>
+                        </ul>
+                    </section>
+                </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
